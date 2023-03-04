@@ -30,8 +30,9 @@ public class CreditCard implements ICard {
      * @throws CreditCardException если баланс отрицательный
      */
     public CreditCard(LocalDateTime dateCreate, double balance, boolean identification) throws Exception {
-        if (balance < 0)
+        if (balance < 0){
             throw new CreditCardException("Creating an account must be with a positive balance");
+        }
         this.balance = balance;
         this.transaction = new ArrayList<>();
         this.cardId = UUID.randomUUID();
@@ -67,8 +68,9 @@ public class CreditCard implements ICard {
     }
 
     public void setUntrustedUserLimit(double untrustedUserLimit) throws Exception {
-        if (untrustedUserLimit < 0)
+        if (untrustedUserLimit < 0){
             throw new CreditCardException("Limit must be positive");
+        }
         this.untrustedUserLimit = untrustedUserLimit;
     }
 
@@ -79,19 +81,22 @@ public class CreditCard implements ICard {
      */
     public void addDay(LocalDateTime dateStamp) {
         timeNow = dateStamp;
-        if (balance < 0)
+        if (balance < 0){
             balance -= commission;
+        }
     }
 
     public void setCommission(double commission) throws Exception {
-        if (commission < 0)
+        if (commission < 0){
             throw new CreditCardException("Credit commission must be a positive number");
+        }
         this.commission = commission;
     }
 
     public void setCreditLimit(double creditLimit) throws Exception {
-        if (creditLimit > 0)
+        if (creditLimit > 0) {
             throw new CreditCardException("Credit limit must be negative");
+        }
         this.creditLimit = creditLimit;
     }
 
@@ -123,12 +128,15 @@ public class CreditCard implements ICard {
      *                             если сумма вывода отрицательна или если сумма вывода превышает кредитный лимит.
      */
     public void withdrawMoneyWithOutHistory(double money) throws Exception {
-        if (!identification && money > untrustedUserLimit)
+        if (!identification && money > untrustedUserLimit){
             throw new CreditCardException("Limit exceeded for an unidentified user");
-        if (money <= 0)
+        }
+        if (money <= 0){
             throw new CreditCardException("You can't take a negative value");
-        if (balance - money < creditLimit)
+        }
+        if (balance - money < creditLimit){
             throw new CreditCardException("Credit limit exceeded when withdrawing");
+        }
         balance -= money;
     }
 
@@ -139,8 +147,9 @@ public class CreditCard implements ICard {
      * @throws CreditCardException если сумма денег отрицательна или равна нулю
      */
     public void topUpCard(double money) throws Exception {
-        if (money <= 0)
+        if (money <= 0) {
             throw new CreditCardException("Can't top up card negative or zero value");
+        }
         balance += money;
         transaction.add(new Transaction(LocalDateTime.now(), cardId, money));
     }
@@ -156,8 +165,9 @@ public class CreditCard implements ICard {
      * @throws CreditCardException if the specified amount of money is negative or zero, which is not allowed for topping up a card.
      */
     public void topUpCardWithOutHistory(double money) throws Exception {
-        if (money <= 0)
+        if (money <= 0) {
             throw new CreditCardException("Can't top up card negative or zero value");
+        }
         balance += money;
     }
 
@@ -171,10 +181,12 @@ public class CreditCard implements ICard {
      * @throws Exception           если во время передачи возникнет какая-либо другая ошибка.
      */
     public void transferMoney(double money, ICard card) throws Exception {
-        if (!identification && money > untrustedUserLimit)
+        if (!identification && money > untrustedUserLimit) {
             throw new CreditCardException("Untrusted user limit exceeded when transferring money");
-        if (money <= 0)
+        }
+        if (money <= 0) {
             throw new CreditCardException("You can't take a negative value");
+        }
         balance -= money;
         card.topUpCardWithOutHistory(money);
         transaction.add(new Transaction(cardId, card.getId(), LocalDateTime.now(), money));
@@ -189,8 +201,9 @@ public class CreditCard implements ICard {
      * @throws CreditCardException если индекс отрицательный или транзакция не существует
      */
     public Transaction getTransaction(int number) throws Exception {
-        if (number < 0)
+        if (number < 0){
             throw new CreditCardException("Index cannot be negative");
+        }
         return transaction.get(number);
     }
 }

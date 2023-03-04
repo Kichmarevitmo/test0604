@@ -31,8 +31,9 @@ public class DebitCard implements ICard {
      * @throws DebitCardException если баланс отрицательный.
      */
     public DebitCard(LocalDateTime dateCreate, double balance, boolean identification) throws Exception {
-        if (balance < 0)
+        if (balance < 0) {
             throw new DebitCardException("Account creation cannot be with a negative balance");
+        }
         this.balance = balance;
         this.transactions = new ArrayList<>();
         this.cardId = UUID.randomUUID();

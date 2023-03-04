@@ -156,14 +156,18 @@ public class DepositCard implements ICard {
      * @throws Exception            если при попытке вывести деньги возникает ошибка
      */
     public void withdrawMoneyWithOutHistory(double money) throws Exception {
-        if (!identification && money > untrustedUserLimit)
+        if (!identification && money > untrustedUserLimit){
             throw new DepositCardException("You cannot withdraw above the limit for an unidentified user");
-        if (money <= 0)
+        }
+        if (money <= 0) {
             throw new DepositCardException("You can't take a negative value");
-        if (balance - money < 0)
+        }
+        if (balance - money < 0) {
             throw new DepositCardException("Debit card cannot go into negative");
-        if (LocalDateTime.now().isBefore(dateEnd))
-            throw new DepositCardException("Error");
+        }
+        if (LocalDateTime.now().isBefore(dateEnd)) {
+            throw new DepositCardException("Date is uncorrected");
+        }
         balance -= money;
     }
 
@@ -175,8 +179,9 @@ public class DepositCard implements ICard {
      * @throws Exception            если при попытке пополнить баланс депозитной карты произошла ошибка
      */
     public void topUpCard(double money) throws Exception {
-        if (money <= 0)
+        if (money <= 0) {
             throw new DepositCardException("Can't top up card negative or zero value");
+        }
         balance += money;
         transactions.add(new Transaction(LocalDateTime.now(), cardId, money));
     }
@@ -193,8 +198,9 @@ public class DepositCard implements ICard {
      * @throws Exception            если при попытке начисления процентов на баланс депозитной карты возникает ошибка
      */
     public void addPercentSum(double percentSum) throws Exception {
-        if (percentSum < 0)
+        if (percentSum < 0) {
             throw new DepositCardException("Percentage cannot be negative");
+        }
         this.percentSum += balance * percentSum / 100;
     }
 
@@ -215,8 +221,9 @@ public class DepositCard implements ICard {
      * @throws Exception            если при попытке пополнить баланс депозитной карты произошла ошибка
      */
     public void topUpCardWithOutHistory(double money) throws Exception {
-        if (money <= 0)
+        if (money <= 0) {
             throw new DepositCardException("Can't top up card negative or zero value");
+        }
         balance += money;
     }
 
@@ -231,15 +238,18 @@ public class DepositCard implements ICard {
      * @throws Exception            если при попытке перевести деньги на указанный объект iCard возникает ошибка
      */
     public void transferMoney(double money, ICard card) throws Exception {
-        if (!identification && money > untrustedUserLimit)
+        if (!identification && money > untrustedUserLimit) {
             throw new DepositCardException("You cannot transfer money to an unidentified user above the limit");
-
-        if (money <= 0)
+        }
+        if (money <= 0) {
             throw new DepositCardException("You can't take a negative value");
-        if (balance - money < 0)
+        }
+        if (balance - money < 0) {
             throw new DepositCardException("Debit card cannot go into negative");
-        if (LocalDateTime.now().isBefore(dateEnd))
+        }
+        if (LocalDateTime.now().isBefore(dateEnd)) {
             throw new DepositCardException("The card hasn't expired yet");
+        }
         balance -= money;
         card.topUpCardWithOutHistory(money);
         transactions.add(new Transaction(cardId, card.getId(), LocalDateTime.now(), money));

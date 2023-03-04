@@ -50,12 +50,10 @@ public class CentralBank {
      * @throws CentralBankException если банк с указанным названием не найден
      */
     public Bank getBank(String title) throws Exception {
-        for (Bank bank : listBanks) {
-            if (title.equals(bank.getTitle())) {
-                return bank;
-            }
-        }
-        throw new CentralBankException("Bank not found");
+        return listBanks.stream()
+                .filter(bank -> title.equals(bank.getTitle()))
+                .findFirst()
+                .orElseThrow(() -> new CentralBankException("Bank not found"));
     }
 
     /**
@@ -66,14 +64,11 @@ public class CentralBank {
      * @throws CentralBankException если не найдена карта с указанным ID карты
      */
     public ICard getCard(UUID cardId) throws Exception {
-        for (Bank bank : listBanks) {
-            for (ICard card : bank.getListCards()) {
-                if (card.getId().equals(cardId)) {
-                    return card;
-                }
-            }
-        }
-        throw new CentralBankException("Card not found");
+        return listBanks.stream()
+                .flatMap(bank -> bank.getListCards().stream())
+                .filter(card -> card.getId().equals(cardId))
+                .findFirst()
+                .orElseThrow(() -> new CentralBankException("Card not found"));
     }
 
     /**

@@ -36,38 +36,46 @@ public class Main {
                     System.out.println("Введите фамилию:");
                     String surname = scanner.nextLine();
                     System.out.println("Введите начальный баланс:");
-                    String balance = scanner.nextLine();
+                    double balance = scanner.nextDouble();
                     System.out.println("Введите адрес:");
                     String address = scanner.nextLine();
                     System.out.println("Введите паспортные данные:");
-                    String passportId = scanner.nextLine();
+                    int passportId = scanner.nextInt();
                     System.out.println("Введите банк:");
                     String nameBanks = scanner.nextLine();
-                    centralBank.getBank(nameBanks).addUser(new UserBuilder(name, surname, Double.parseDouble(balance)).withAddress(address).withPassportId(Integer.parseInt(passportId)).build());
-                    System.out.println("Пользователь создан и добавлен в банк. Его id: " + centralBank.getBank(nameBanks).getListUsers().get(centralBank.getBank(nameBanks).getListUsers().size() - 1).getUserId().toString());
+                    centralBank.getBank(nameBanks).addUser(new UserBuilder(name, surname, balance)
+                            .withAddress(address).withPassportId(passportId).build());
+                    System.out.println("Пользователь создан и добавлен в банк. Его id: " + centralBank.getBank(nameBanks)
+                            .getListUsers().get(centralBank.getBank(nameBanks).getListUsers().size() - 1)
+                            .getUserId().toString());
                     break;
                 case "2":
                     System.out.println("Введите название банка:");
                     String title = scanner.nextLine();
                     System.out.println("Введите первый уровень процента:");
-                    String firstPercent = scanner.nextLine();
+                    double firstPercent = scanner.nextDouble();
                     System.out.println("Введите второй уровень процента:");
-                    String secondPercent = scanner.nextLine();
+                    double secondPercent = scanner.nextDouble();
                     System.out.println("Введите третий уровень процента:");
-                    String thirdPercent = scanner.nextLine();
+                    double thirdPercent = scanner.nextDouble();
                     System.out.println("Введите первый уровень суммы:");
-                    String firstStepSum = scanner.nextLine();
+                    double firstStepSum = scanner.nextDouble();
                     System.out.println("Введите второй уровень суммы:");
-                    String secondStepSum = scanner.nextLine();
+                    double secondStepSum = scanner.nextDouble();
                     System.out.println("Процент на остаток для дебетовой карты:");
-                    String percentDebitCard = scanner.nextLine();
+                    double percentDebitCard = scanner.nextDouble();
                     System.out.println("Кредитный лимит:");
-                    String creditLimit = scanner.nextLine();
+                    double creditLimit = scanner.nextDouble();
                     System.out.println("Комиссия:");
-                    String commission = scanner.nextLine();
+                    double commission = scanner.nextDouble();
                     System.out.println("Лимит для неидентифицированного пользователя:");
-                    String untrustedUserLimit = scanner.nextLine();
-                    centralBank.addBank(new Bank(title, Double.parseDouble(firstPercent), Double.parseDouble(secondPercent), Double.parseDouble(thirdPercent), Double.parseDouble(firstStepSum), Double.parseDouble(secondStepSum), Double.parseDouble(percentDebitCard), Double.parseDouble(creditLimit), Double.parseDouble(commission), Double.parseDouble(untrustedUserLimit)));
+                    double untrustedUserLimit = scanner.nextDouble();
+                    centralBank.addBank(new Bank(title, firstPercent,
+                            secondPercent,
+                            thirdPercent, firstStepSum,
+                            secondStepSum, percentDebitCard,
+                            creditLimit, commission,
+                            untrustedUserLimit));
                     timeManager.addObserver(centralBank.getListBanks().get(centralBank.getListBanks().size() - 1));
                     System.out.println("Банк добавлен.");
                     break;
@@ -75,37 +83,50 @@ public class Main {
                     System.out.println("Введите название банка:");
                     String titleBank = scanner.nextLine();
                     System.out.println("Введите начальный баланс:");
-                    String startBalanceCreditCard = scanner.nextLine();
+                    double startBalanceCreditCard = scanner.nextDouble();
                     System.out.println("Введите id пользователя:");
                     String guidUser = scanner.nextLine();
-                    centralBank.getBank(titleBank).addCreditCard(timeManager.getTimeStamp(), Double.parseDouble(startBalanceCreditCard), centralBank.getBank(titleBank).findUser(UUID.fromString(guidUser)).getUserId());
-                    System.out.println(String.format("Кредитная карта создана. Её id: %s", centralBank.getBank(titleBank).getListCreditCards().get(centralBank.getBank(titleBank).getListCreditCards().size() - 1).getCardId().toString()));
+                    centralBank.getBank(titleBank).addCreditCard(timeManager.getTimeStamp(),
+                            startBalanceCreditCard,
+                            centralBank.getBank(titleBank).findUser(UUID.fromString(guidUser)).getUserId());
+                    System.out.println(String.format("Кредитная карта создана. Её id: %s", centralBank.getBank(titleBank)
+                            .getListCreditCards().get(centralBank.getBank(titleBank).getListCreditCards().size() - 1)
+                            .getCardId().toString()));
                     break;
                 case "4":
                     System.out.println("Введите название банка:");
                     String titleBankDebitCard = scanner.nextLine();
                     System.out.println("Введите начальный баланс:");
-                    String startBalanceDebitCard = scanner.nextLine();
+                    Double startBalanceDebitCard = scanner.nextDouble();
                     System.out.println("Введите id пользователя:");
                     String guidUserDebitCard = scanner.nextLine();
-                    centralBank.getBank(titleBankDebitCard).addDebitCard(timeManager.getTimeStamp(), Double.parseDouble(startBalanceDebitCard), centralBank.getBank(titleBankDebitCard).findUser(UUID.fromString(guidUserDebitCard)).getUserId());
-                    System.out.println(String.format("Дебитовая карта создана. Её id: %s", centralBank.getBank(titleBankDebitCard).getListDebitCards().get(centralBank.getBank(titleBankDebitCard).getListDebitCards().size() - 1).getCardId().toString()));
+                    centralBank.getBank(titleBankDebitCard).addDebitCard(timeManager.getTimeStamp(),
+                            startBalanceDebitCard, centralBank.getBank(titleBankDebitCard)
+                                    .findUser(UUID.fromString(guidUserDebitCard)).getUserId());
+                    System.out.println(String.format("Дебитовая карта создана. Её id: %s", centralBank
+                            .getBank(titleBankDebitCard).getListDebitCards().get(centralBank.getBank(titleBankDebitCard)
+                                    .getListDebitCards().size() - 1).getCardId().toString()));
                     break;
                 case "5":
                     System.out.println("Введите название банка:");
                     String titleBankDepositCard = scanner.nextLine();
                     System.out.println("Введите начальный баланс:");
-                    String startBalanceDepositCard = scanner.nextLine();
+                    double startBalanceDepositCard = scanner.nextDouble();
                     System.out.println("Введите id пользователя:");
                     String guidUserDepositCard = scanner.nextLine();
                     System.out.println("Введите день:");
-                    String day = scanner.nextLine();
+                    int day = scanner.nextInt();
                     System.out.println("Введите месяц:");
-                    String month = scanner.nextLine();
+                    int month = scanner.nextInt();
                     System.out.println("Введите год:");
-                    String year = scanner.nextLine();
-                    centralBank.getBank(titleBankDepositCard).addDepositCard(timeManager.getTimeStamp(), LocalDateTime.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day), 0, 0), Double.parseDouble(startBalanceDepositCard), centralBank.getBank(titleBankDepositCard).findUser(UUID.fromString(guidUserDepositCard)).getUserId());
-                    System.out.println("Депозитная карта создана. Её id: " + centralBank.getBank(titleBankDepositCard).getListDepositCards().get(centralBank.getBank(titleBankDepositCard).getListDepositCards().size() - 1).getCardId().toString());
+                    int year = scanner.nextInt();
+                    centralBank.getBank(titleBankDepositCard).addDepositCard(timeManager.getTimeStamp(),
+                            LocalDateTime.of(year, month,
+                                    day, 0, 0), startBalanceDepositCard,
+                            centralBank.getBank(titleBankDepositCard).findUser(UUID.fromString(guidUserDepositCard)).getUserId());
+                    System.out.println("Депозитная карта создана. Её id: " + centralBank.getBank(titleBankDepositCard)
+                            .getListDepositCards().get(centralBank.getBank(titleBankDepositCard).getListDepositCards().size() - 1)
+                            .getCardId().toString());
                     break;
                 case "6":
                     timeManager.addDay();
@@ -121,9 +142,9 @@ public class Main {
                     System.out.println("Введите на какой счет хотите перевести:");
                     String idTo = scanner.nextLine();
                     System.out.println("Введите сумму перевода:");
-                    String transferMoney = scanner.nextLine();
+                    double transferMoney = scanner.nextDouble();
                     centralBank.transferMoney(
-                            Double.parseDouble(transferMoney),
+                            transferMoney,
                             centralBank.getCard(UUID.fromString(idFrom)).getId(),
                             centralBank.getCard(UUID.fromString(idTo)).getId());
                     System.out.println("Перевод суммы успешно прошел!");
@@ -132,26 +153,27 @@ public class Main {
                     System.out.println("Введите с какого счета хотите отменить транзакцию:");
                     String idCard = scanner.nextLine();
                     System.out.println("Введите номер транзакции:");
-                    String numberTransaction = scanner.nextLine();
+                    int numberTransaction = scanner.nextInt();
                     centralBank.transactionCancellation(
                             centralBank.getCard(UUID.fromString(idCard)).getId(),
-                            Integer.parseInt(numberTransaction));
+                            numberTransaction);
                     System.out.println("Транзакция отменена!");
                     break;
                 case "10":
                     System.out.println("Введите с какого счета хотите снять деньги:");
                     String idCardWithdrawMoney = scanner.nextLine();
                     System.out.println("Введите сумму:");
-                    String withdrawMoney = scanner.nextLine();
-                    centralBank.getCard(UUID.fromString(idCardWithdrawMoney)).withdrawMoney(Double.parseDouble(withdrawMoney));
+                    double withdrawMoney = scanner.nextDouble();
+                    centralBank.getCard(UUID.fromString(idCardWithdrawMoney)).
+                            withdrawMoney(withdrawMoney);
                     System.out.println("Сумма успешно снята со счета!");
                     break;
                 case "11":
                     System.out.println("Введите на какой счет хотите положить деньги:");
                     String idCardTopUp = scanner.nextLine();
                     System.out.println("Введите сумму:");
-                    String topUpMoney = scanner.nextLine();
-                    centralBank.getCard(UUID.fromString(idCardTopUp)).topUpCard(Double.parseDouble(topUpMoney));
+                    double topUpMoney = scanner.nextDouble();
+                    centralBank.getCard(UUID.fromString(idCardTopUp)).topUpCard(topUpMoney);
                     System.out.println("Сумма успешно положена!");
                     break;
                 case "12":

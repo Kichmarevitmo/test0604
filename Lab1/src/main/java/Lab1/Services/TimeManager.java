@@ -35,8 +35,9 @@ public class TimeManager {
      * @throws TimeManagerException если наблюдатель равен нулю
      */
     public void addObserver(IObserver bank) throws Exception {
-        if (bank == null)
+        if (bank == null) {
             throw new TimeManagerException("bank is null");
+        }
         observers.add(bank);
     }
 
